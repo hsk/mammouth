@@ -785,11 +785,12 @@ NamespaceId
 	}
 	
 ClassDeclaration
-	= ClassToken __ name:Identifier __ '->' __
+	= ClassToken __ name:Identifier __ e1:('extends' __ Identifier __ )? '->' __
 	body:( b:blank* INDENT c:(n:ClassStatement)* DEDENT { return b.concat(c); })? {
 		return {
 			type:"ClassDeclaration",
 			name: name,
+			ext: e1 !== "" ? e1[2]: null,
 			body: body !== '' ? body: null
 		}
 	}

@@ -923,6 +923,9 @@ mammouth.compile = function(code) {
 				return r;
 			case 'ClassDeclaration':
 				var r = Tokens.ClassToken + ' ' + evalStatement(seq.name);
+				if(seq.ext != null) {
+					r += ' extends ' + seq.ext;
+				}
 				r += ' {';
 				if(seq.body != null) {
 					var body = '';

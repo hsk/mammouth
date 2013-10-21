@@ -7432,7 +7432,7 @@ mammouth.parser = (function(){
       }
       
       function parse_ClassDeclaration() {
-        var result0, result1, result2, result3, result4, result5, result6, result7, result8, result9;
+        var result0, result1, result2, result3, result4, result5, result6, result7, result8, result9, result10;
         var pos0, pos1, pos2, pos3;
         
         pos0 = pos;
@@ -7445,64 +7445,104 @@ mammouth.parser = (function(){
             if (result2 !== null) {
               result3 = parse___();
               if (result3 !== null) {
-                if (input.substr(pos, 2) === "->") {
-                  result4 = "->";
-                  pos += 2;
+                pos2 = pos;
+                if (input.substr(pos, 7) === "extends") {
+                  result4 = "extends";
+                  pos += 7;
                 } else {
                   result4 = null;
                   if (reportFailures === 0) {
-                    matchFailed("\"->\"");
+                    matchFailed("\"extends\"");
                   }
                 }
                 if (result4 !== null) {
                   result5 = parse___();
                   if (result5 !== null) {
-                    pos2 = pos;
-                    pos3 = pos;
-                    result6 = [];
-                    result7 = parse_blank();
-                    while (result7 !== null) {
-                      result6.push(result7);
-                      result7 = parse_blank();
-                    }
+                    result6 = parse_Identifier();
                     if (result6 !== null) {
-                      result7 = parse_INDENT();
+                      result7 = parse___();
                       if (result7 !== null) {
-                        result8 = [];
-                        result9 = parse_ClassStatement();
-                        while (result9 !== null) {
-                          result8.push(result9);
-                          result9 = parse_ClassStatement();
-                        }
+                        result4 = [result4, result5, result6, result7];
+                      } else {
+                        result4 = null;
+                        pos = pos2;
+                      }
+                    } else {
+                      result4 = null;
+                      pos = pos2;
+                    }
+                  } else {
+                    result4 = null;
+                    pos = pos2;
+                  }
+                } else {
+                  result4 = null;
+                  pos = pos2;
+                }
+                result4 = result4 !== null ? result4 : "";
+                if (result4 !== null) {
+                  if (input.substr(pos, 2) === "->") {
+                    result5 = "->";
+                    pos += 2;
+                  } else {
+                    result5 = null;
+                    if (reportFailures === 0) {
+                      matchFailed("\"->\"");
+                    }
+                  }
+                  if (result5 !== null) {
+                    result6 = parse___();
+                    if (result6 !== null) {
+                      pos2 = pos;
+                      pos3 = pos;
+                      result7 = [];
+                      result8 = parse_blank();
+                      while (result8 !== null) {
+                        result7.push(result8);
+                        result8 = parse_blank();
+                      }
+                      if (result7 !== null) {
+                        result8 = parse_INDENT();
                         if (result8 !== null) {
-                          result9 = parse_DEDENT();
+                          result9 = [];
+                          result10 = parse_ClassStatement();
+                          while (result10 !== null) {
+                            result9.push(result10);
+                            result10 = parse_ClassStatement();
+                          }
                           if (result9 !== null) {
-                            result6 = [result6, result7, result8, result9];
+                            result10 = parse_DEDENT();
+                            if (result10 !== null) {
+                              result7 = [result7, result8, result9, result10];
+                            } else {
+                              result7 = null;
+                              pos = pos3;
+                            }
                           } else {
-                            result6 = null;
+                            result7 = null;
                             pos = pos3;
                           }
                         } else {
-                          result6 = null;
+                          result7 = null;
                           pos = pos3;
                         }
                       } else {
-                        result6 = null;
+                        result7 = null;
                         pos = pos3;
                       }
-                    } else {
-                      result6 = null;
-                      pos = pos3;
-                    }
-                    if (result6 !== null) {
-                      result6 = (function(offset, b, c) { return b.concat(c); })(pos2, result6[0], result6[2]);
-                    }
-                    if (result6 === null) {
-                      pos = pos2;
-                    }
-                    result6 = result6 !== null ? result6 : "";
-                    if (result6 !== null) {
-                      result0 = [result0, result1, result2, result3, result4, result5, result6];
+                      if (result7 !== null) {
+                        result7 = (function(offset, b, c) { return b.concat(c); })(pos2, result7[0], result7[2]);
+                      }
+                      if (result7 === null) {
+                        pos = pos2;
+                      }
+                      result7 = result7 !== null ? result7 : "";
+                      if (result7 !== null) {
+                        result0 = [result0, result1, result2, result3, result4, result5, result6, result7];
+                      } else {
+                        result0 = null;
+                        pos = pos1;
+                      }
                     } else {
                       result0 = null;
                       pos = pos1;
@@ -7532,13 +7572,14 @@ mammouth.parser = (function(){
           pos = pos1;
         }
         if (result0 !== null) {
-          result0 = (function(offset, name, body) {
+          result0 = (function(offset, name, e1, body) {
         		return {
         			type:"ClassDeclaration",
         			name: name,
+        			ext: e1 !== "" ? e1[2]: null,
         			body: body !== '' ? body: null
         		}
-        	})(pos0, result0[2], result0[6]);
+        	})(pos0, result0[2], result0[4], result0[7]);
         }
         if (result0 === null) {
           pos = pos0;
