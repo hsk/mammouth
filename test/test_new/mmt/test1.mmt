@@ -1,0 +1,19 @@
+{{
+class A ->
+
+  
+  b() ->
+    @a()
+
+  a() ->
+    echo(@h "test" @c())
+
+  h = "a"
+
+  c() ->
+    return("555")
+
+a = new A
+a.b()
+
+}}

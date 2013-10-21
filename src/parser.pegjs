@@ -123,28 +123,26 @@ AssignmentOperator
 LeftHandSideExpression
 	= CallExpression
 	/ SliceExpression
-	/ NewExpression
-
-NewExpression
-	= MemberExpression
-	/ NewToken __ constructor:(NamespaceId/Identifier) {
-		return {
-			type:        "NewOperator",
-			constructor: constructor,
-			arguments:   []
-		};
-	}
+	/ MemberExpression
 
 MemberExpression
 	= base:(
-		PrimaryExpression
-		/ NewToken __ constructor:(NamespaceId/Identifier) __ arguments:Arguments {
+		NewToken __ constructor:(NamespaceId/Identifier) __ arguments:Arguments {
 			return {
 				type:        "NewOperator",
 				constructor: constructor,
 				arguments:   arguments
 			};
 		}
+		/ NewToken __ constructor:(NamespaceId/Identifier) {
+			return {
+				type:        "NewOperator",
+				constructor: constructor,
+				arguments:   []
+			};
+		}
+		/ PrimaryExpression
+
 	)
 	accessors:(
 		__ "[" __ name:Expression __ "]" { return name; }
