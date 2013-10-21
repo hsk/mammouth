@@ -171,7 +171,7 @@ mammouth.compile = function(code) {
 				}
 				return r;
 			case 'VariableConst':
-				var r = '$' + '__' + evalStatement(seq.name) + '__';
+				var r = evalStatement(seq.name);
 				if(seq.only==true) {
 					r += ';';
 				}
@@ -185,6 +185,20 @@ mammouth.compile = function(code) {
 				if(typeof seq.name == 'string') {
 					n = seq.name;
 					r = b + '->' + n;
+				} else {
+					n = '[' + evalStatement(seq.name) + ']'
+					r = b + n;
+				} 
+				if(seq.only==true) {
+					r += ';';
+				}
+				return r;
+			case 'StaticAccess':
+				var b = evalStatement(seq.base);
+				var n, r;
+				if(typeof seq.name == 'string') {
+					n = seq.name;
+					r = b + '::' + n;
 				} else {
 					n = '[' + evalStatement(seq.name) + ']'
 					r = b + n;
@@ -306,7 +320,7 @@ mammouth.compile = function(code) {
 				return r;
 			case 'FunctionCall':
 				var name;
-				if(seq.name.type == 'PropertyAccess') {
+				if(seq.name.type == 'PropertyAccess' || seq.name.type == 'StaticAccess') {
 					name = evalStatement(seq.name);
 				} else {
 					name = evalStatement(seq.name.name);

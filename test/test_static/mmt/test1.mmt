@@ -1,0 +1,30 @@
+{{
+class A ->
+  __construct(prm) ->
+    echo("a construct " prm "\n")
+
+class B extends A ->
+
+  __construct() ->
+    :parent::__construct("test")
+    echo("b construct\n")
+
+  const A = "a"
+
+  test() ->
+    
+    echo("test" :B::A "\n")
+
+  static st() ->
+    var_export(:self::$stvalue)
+    echo("\n")
+
+  static stvalue = ["a","b"]
+
+b = new B
+b.test()
+:B::st()
+echo("const " :B::A "\n")
+echo("static " :B::$stvalue "\n")
+
+}}

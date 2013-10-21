@@ -145,15 +145,16 @@ MemberExpression
 
 	)
 	accessors:(
-		__ "[" __ name:Expression __ "]" { return name; }
-		/ __ "." __ name:IdentifierName    { return name; }
+		__ "[" __ name:Expression __ "]" { return {type:"PropertyAccess", name:name}; }
+		/ __ "." __ name:IdentifierName    { return {type:"PropertyAccess", name:name}; }
+		/ __ "::" __ name:IdentifierName  { return {type:"StaticAccess", name:name}; }
 	)* {
 		var result = base;
 		for (var i = 0; i < accessors.length; i++) {
 			result = {
-				type: "PropertyAccess",
+				type: accessors[i].type,
 				base: result,
-				name: accessors[i]
+				name: accessors[i].name
 			};
 		}
 		return result;
@@ -188,6 +189,12 @@ CallExpression
 				name: name
 			};
 		}
+		/ __ "::" __ name:IdentifierName {
+			return {
+				type: "StaticAccessProperty",
+				name: name
+			};
+		}
 	)* {
 		var result = base;
 		for (var i = 0; i < argumentsOrAccessors.length; i++) {
@@ -202,6 +209,13 @@ CallExpression
 				case "PropertyAccessProperty":
 					result = {
 						type: "PropertyAccess",
+						base: result,
+						name: argumentsOrAccessors[i].name
+					};
+					break;
+				case "StaticAccessProperty":
+					result = {
+						type: "StaticAccess",
 						base: result,
 						name: argumentsOrAccessors[i].name
 					};
@@ -546,6 +560,12 @@ CallExpression
 				name: name
 			};
 		}
+		/ __ "::" __ name:IdentifierName {
+			return {
+				type: "StaticAccessProperty",
+				name: name
+			};
+		}
 	)* {
 		var result = base;
 		for (var i = 0; i < argumentsOrAccessors.length; i++) {
@@ -560,6 +580,13 @@ CallExpression
 				case "PropertyAccessProperty":
 					result = {
 						type: "PropertyAccess",
+						base: result,
+						name: argumentsOrAccessors[i].name
+					};
+					break;
+				case "StaticAccessProperty":
+					result = {
+						type: "StaticAccess",
 						base: result,
 						name: argumentsOrAccessors[i].name
 					};
@@ -819,7 +846,7 @@ ClassPropertyDeclaration
 	}
 
 ClassConstPropertyDeclaration
-	= ConstToken __ left:(name:Identifier { return { type: "Variable", name: name }; }) __
+	= ConstToken __ left:(name:Identifier { return { type: "VariableConst", name: name }; }) __
 	m:(operator:AssignmentOperator __
 	right:(!(EOTLiteral/EODLiteral) n:(AssignmentExpression/FunctionExpression)))? {
 		return {
@@ -846,9 +873,9 @@ ClassFunctionDeclaration
 	}
 
 PropertyVisibility
-	= PrivateToken
-	/ ProtectedToken
-	/ PublicToken
+	= (m:(StaticToken __ (PrivateToken / ProtectedToken / PublicToken)) { return m[0]+" "+m[2];})
+	/ (m:((PrivateToken / ProtectedToken / PublicToken) __ StaticToken ){ return m[0]+" "+m[2];})
+	/ (PrivateToken / ProtectedToken / PublicToken / StaticToken)
 
 /* ===== Tokens ===== */
 AndToken = 'and'
