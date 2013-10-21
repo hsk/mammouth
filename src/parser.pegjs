@@ -1089,6 +1089,7 @@ SingleStringCharacters
 
 DoubleStringCharacter
 	= !('"' / "\\" / LineTerminator) char_:SourceCharacter { return char_;     }
+	/ m:("\\" .) { return "'.\"\\"+m[1]+"\".'"; }
 
 SingleStringCharacter
 	= !("'" / "\\" / LineTerminator) char_:SourceCharacter { return char_;     }
