@@ -1016,6 +1016,7 @@ Literal
 			value: value
 		}
 	}
+	/ DefineLiteral
 
 NullLiteral
 	= NullToken { return { type: "NullLiteral" }; }
@@ -1023,6 +1024,9 @@ NullLiteral
 BooleanLiteral
 	= TrueToken  { return { type: "BooleanLiteral", value: true  }; }
 	/ FalseToken { return { type: "BooleanLiteral", value: false }; }
+
+DefineLiteral
+	= ':' id:IdentifierName { return { type: "DefineLiteral", value: id }; }
 
 NumericLiteral "number"
 	= literal:(HexIntegerLiteral / DecimalLiteral) {

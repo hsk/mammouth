@@ -114,6 +114,12 @@ mammouth.compile = function(code) {
 					r += ';';
 				}
 				return r;
+			case 'DefineLiteral':
+				var r = seq.value;
+				if(seq.only==true) {
+					r += ';';
+				}
+				return r;
 			case 'StringLiteral':
 				var r = "'" + seq.value + "'";
 				if(seq.only==true) {
