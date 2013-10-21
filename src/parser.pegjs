@@ -16,6 +16,7 @@ code_block
 
 PrimaryExpression
 	= ThisToken       { return { type: "This" }; }
+	/ Literal
 	/ name:Identifier { return { type: "Variable", name: name }; }
 	/ "@" name:Identifier { return {
 			type: "PropertyAccess",
@@ -24,7 +25,6 @@ PrimaryExpression
 		};
 	}
 	/ NamespaceId
-	/ Literal
 	/ ArrayLiteral
 	/ "(" __ expression:Expression __ ")" { return expression; }
 

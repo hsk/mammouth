@@ -1,0 +1,3 @@
+<?php 
+echo('test '.var_export(false, true).''."\n".'');
+?>
