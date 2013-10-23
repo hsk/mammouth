@@ -1,15 +1,36 @@
 {{
+happy = true
+knowsIt = true
+
+clapsHands() ->
+  echo("claps\n")
+chaChaCha() ->
+  echo("cha cha cha\n")
+showIt() ->
+  echo("show it\n")
+
 if happy && knowsIt
   clapsHands()
   chaChaCha()
 else
   showIt()
 
-a() ->
+a(happy, knowsIt) ->
   if happy && knowsIt
     clapsHands()
-    chaChaCha()
   else
     showIt()
+
+a(false,false)
+
+
+class A ->
+  a1(happy) ->
+    if happy
+      echo("hoge")
+
+a = new A
+a.a1(true)
+
 
 }}
