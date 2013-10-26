@@ -13,6 +13,9 @@ function showIt() {
 if($happy && $knowsIt) {
 	clapsHands();
 	chaChaCha();
+	if(1) {
+		echo('ok'."\n".'');
+	}
 } else {
 	showIt();
 }

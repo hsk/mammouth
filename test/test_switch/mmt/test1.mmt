@@ -4,10 +4,17 @@ go(a) ->
   echo (a "\n")
 
 day = "Mon"
+one = true
+
 
 switch day
   case "Mon"
     go("work")
+    switch one
+      case true
+        go("one")
+      else
+        go("no one")      
   case "Tue"
     go("relax")
   else
